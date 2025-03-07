@@ -24,11 +24,12 @@ local function CreateDancingNPCs(model, locationData, animDict, animName, isDual
     end
 
     for _, item in pairs(locationData) do
-        local npc1 = CreatePed(1, GetHashKey(model), item.x, item.y, item.z, item.heading, false, true)
+        -- Use item.w for the rotation value
+        local npc1 = CreatePed(1, GetHashKey(model), item.x, item.y, item.z, item.w, false, true)
         local npc2 = nil
 
         if isDual then
-            npc2 = CreatePed(1, GetHashKey(model), item.x, item.y, item.z, item.heading, false, true)
+            npc2 = CreatePed(1, GetHashKey(model), item.x, item.y, item.z, item.w, false, true)
         end
 
         RequestAnimDict(animDict)
@@ -44,13 +45,13 @@ local function CreateDancingNPCs(model, locationData, animDict, animName, isDual
         end
 
         FreezeEntityPosition(npc1, true)
-        SetEntityHeading(npc1, item.heading)
+        SetEntityHeading(npc1, item.w)
         SetEntityInvincible(npc1, true)
         SetBlockingOfNonTemporaryEvents(npc1, true)
 
         if isDual and npc2 then
             FreezeEntityPosition(npc2, true)
-            SetEntityHeading(npc2, item.heading)
+            SetEntityHeading(npc2, item.w)
             SetEntityInvincible(npc2, true)
             SetBlockingOfNonTemporaryEvents(npc2, true)
         end
@@ -84,7 +85,7 @@ CreateThread(function()
             Wait(1)
             if not IsPedInAnyVehicle(playerPed, true) then
                 if distance < 3 then
-                    exports['qb-core']:DrawText('[E] Make It Rain', 'left')
+                    exports['qb-core']:DrawText('[E] Make It Rain $10,000', 'right')
 
                     if IsControlJustReleased(0, 54) then -- "E" Key
                         local PlayerData = QBCore.Functions.GetPlayerData()
